@@ -1,8 +1,9 @@
 import React from "react"
 import ReactDOM from "react-dom"
-import {RouterProvider} from "react-router-dom"
+import { RouterProvider } from "react-router-dom"
+import { ContextProvider } from "./contexts/ContextProvider.jsx"
 import router from "./router.jsx"
-
+import "./index.css";
 ReactDOM.render(
     <React.StrictMode>
         <RouterProvider router={router} />

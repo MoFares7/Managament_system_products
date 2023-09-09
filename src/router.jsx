@@ -6,6 +6,7 @@ import SignUpPage from './view/SignUpPage';
 import DefaultLayout from './components/DefaultLayout';
 import { Children } from "react";
 import GuestLayout from './components/GuestLayout';
+import SurvyesViewPage from "./view/SurveysViewPage";
 
 const router = createBrowserRouter([
     {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
             {
                 path: "/surveys",
                 element: <SurveysPage />,
+            },
+            {
+                path: "/surveys/create",
+                element: <SurvyesViewPage />,
             },
         ],
     },

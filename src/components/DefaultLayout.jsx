@@ -1,30 +1,9 @@
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Navigate, NavLink, Outlet } from 'react-router-dom';
 import { useStateContext } from "../contexts/ContextProvider";
-
-const user = {
-        name: 'Tom Cook',
-        email: 'tom@example.com',
-        imageUrl:
-                'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-};
-
-const navigation = [
-        { name: 'Dashboard', to: '/' },
-        { name: 'Surveys', to: '/surveys' },
-
-];
-const logout = (ev) => {
-        ev.preventDefault();
-        console.log("logout");
-}
-const userNavigation = [
-        { name: 'Your Profile', href: '#', onclick: logout },
-        { name: 'Settings', href: '#', onclick: logout },
-        { name: 'Sign out', href: '#', onclick: logout },
-];
+import axiosClient from "../axios.jsx";
 
 function classNames(...classes) {
         return classes.filter(Boolean).join(' ');
@@ -32,11 +11,55 @@ function classNames(...classes) {
 
 export default function DefaultLayout() {
 
-        const { currentUser, userToken } = useStateContext();
+        const { currentUser, userToken, setCurrentUser, setUserToken } =
+                useStateContext();
 
-        // if (!userToken) {
-        //         return <Navigate to='login' />
-        // }
+        if (!userToken) {
+                return <Navigate to="login" />;
+        }
+
+        const logout = (ev) => {
+                ev.preventDefault();
+                axiosClient.post("/logout").then((res) => {
+                        setCurrentUser({});
+                        setUserToken(null);
+                });
+        };
+
+        // useEffect(() => {
+        //         axiosClient.get('/me')
+        //                 .then(({ data }) => {
+        //                         setCurrentUser(data)
+        //                 })
+        // },
+        //         []);
+
+
+        if (!userToken) {
+                return <Navigate to='login' />
+        }
+
+
+        const user = {
+                name: 'Tom Cook',
+                email: 'tom@example.com',
+                imageUrl:
+                        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+        };
+
+        const navigation = [
+                { name: 'Dashboard', to: '/' },
+                { name: 'Surveys', to: '/surveys' },
+
+        ];
+
+
+
+        const userNavigation = [
+                { name: 'Your Profile', href: '#', onclick: logout },
+                { name: 'Settings', href: '#', onclick: logout },
+                { name: 'Sign out', href: '#', onclick: logout },
+        ];
 
         return (
                 <>

@@ -3,7 +3,7 @@ import { useStateContext } from "../contexts/ContextProvider";
 // import { useStateContext } from "../contexts/ContextProvider";
 
 export default function GuestLayout() {
-        
+
         const { userToken } = useStateContext();
 
         if (userToken) {

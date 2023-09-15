@@ -3,9 +3,14 @@ import PageComponent from './../components/PageComponent';
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 import { useState } from "react"
 import TButton from './../components/TButton';
+import { useNavigate } from "react-router-dom";
+import { useStateContext } from "../contexts/ContextProvider";
 
 
 export default function SurvyesViewPage() {
+
+        const { showToast } = useStateContext();
+        const navigate = useNavigate();
 
         const [survey, setSurvey] = useState({
                 title: "",
@@ -18,10 +23,24 @@ export default function SurvyesViewPage() {
                 questions: [],
         });
 
+        const [loading, setLoading] = useState(false);
+        const [error, setError] = useState("");
 
         const onImageChoose = (ev) => {
-            //    const file = ev.target.files[0];
-        }
+                const file = ev.target.files[0];
+
+                const reader = new FileReader();
+                reader.onload = () => {
+                        setSurvey({
+                                ...survey,
+                                image: file,
+                                image_url: reader.result,
+                        });
+
+                        ev.target.value = "";
+                };
+                reader.readAsDataURL(file);
+        };
 
         const onSubmit = (ev) => {
                 ev.preventDefault();

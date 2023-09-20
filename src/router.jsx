@@ -7,6 +7,7 @@ import DefaultLayout from './components/DefaultLayout';
 import { Children } from "react";
 import GuestLayout from './components/GuestLayout';
 import SurvyesViewPage from "./view/SurveysViewPage";
+import SurveyPublicView from "./view/SurveyPublicView";
 
 const router = createBrowserRouter([
     {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
                 path: "/surveys/create",
                 element: <SurvyesViewPage />,
             },
+            {
+                path: "/surveys/:id",
+                element: <SurvyesViewPage />,
+            },
         ],
     },
     {
@@ -44,6 +49,10 @@ const router = createBrowserRouter([
                 element: <SignUpPage />,
             },
         ],
+    },
+    {
+        path: "/survey/public/:slug",
+        element: <SurveyPublicView />,
     },
 ]);
 

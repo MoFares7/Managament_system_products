@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Navigate, NavLink, Outlet } from 'react-router-dom';
@@ -10,13 +10,18 @@ function classNames(...classes) {
 }
 
 export default function DefaultLayout() {
+        const { currentUser, userToken, setCurrentUser, setUserToken } = useStateContext();
 
-        const { currentUser, userToken, setCurrentUser, setUserToken } =
-                useStateContext();
+        useEffect(() => {
+                if (!userToken) {
+                        return;
+                }
 
-        if (!userToken) {
-                return <Navigate to="login" />;
-        }
+                axiosClient.get('/me')
+                        .then(({ data }) => {
+                                setCurrentUser(data);
+                        });
+        }, [userToken, setCurrentUser]);
 
         const logout = (ev) => {
                 ev.preventDefault();
@@ -26,19 +31,9 @@ export default function DefaultLayout() {
                 });
         };
 
-        // useEffect(() => {
-        //         axiosClient.get('/me')
-        //                 .then(({ data }) => {
-        //                         setCurrentUser(data)
-        //                 })
-        // },
-        //         []);
-
-
         if (!userToken) {
-                return <Navigate to='login' />
+                return <Navigate to='login' />;
         }
-
 
         const user = {
                 name: 'Tom Cook',
@@ -50,10 +45,7 @@ export default function DefaultLayout() {
         const navigation = [
                 { name: 'Dashboard', to: '/' },
                 { name: 'Surveys', to: '/surveys' },
-
         ];
-
-
 
         const userNavigation = [
                 { name: 'Your Profile', href: '#', onclick: logout },
